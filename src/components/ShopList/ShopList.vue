@@ -32,9 +32,9 @@
             </section>
             <section class="shop_distance">
               <p class="shop_delivery_msg">
-                <span>¥{{shop.float_minimum_order_amount}}起送</span>
+                <span>¥{{shop.float_minimum_order_amount}}人均</span>
                 <span class="segmentation">/</span>
-                <span>配送费约¥{{shop.float_delivery_fee}}</span>
+                <span>服务费约¥{{shop.float_delivery_fee}}</span>
               </p>
             </section>
           </div>
