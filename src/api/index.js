@@ -28,7 +28,7 @@ export const reqUserInfo = () => ajax(BASE_URL+'/userinfo')
 export const reqLogout = () => ajax(BASE_URL+'/logout')
 
 /**
- * 获取商家信息
+ * 获取商家信息1
  */
 export const reqShopInfo = () => ajax('/info')
 
