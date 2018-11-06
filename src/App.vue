@@ -13,9 +13,10 @@ import {mapActions} from 'vuex'
 export default {
   async mounted(){
   this.getAddress()
+  this.getUserInfo()
   },
   methods: {
-    ...mapActions(['getAddress'])
+    ...mapActions(['getAddress', 'getUserInfo'])
   },
   components: {
     FooterGuide
