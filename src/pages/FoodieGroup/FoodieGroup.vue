@@ -20,11 +20,11 @@
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
-          <a href="javascript:" class="link_to_food">
-            <div class="food_container">
+          <a href="javascript:" class="link_to_food" @click="$router.push('/article')">
+            <div class="food_container" >
               <img src="./images/5.png">
             </div>
-            <span>饭圈点评</span>
+            <span >饭圈点评</span>
           </a>
           <a href="javascript:" class="link_to_food">
             <div class="food_container">
@@ -52,6 +52,7 @@
   </nav>
   <NewList></NewList>
   </div>
+  <!--<router-view/>-->
 </template>
 
 <script>

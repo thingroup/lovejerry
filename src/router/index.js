@@ -10,6 +10,8 @@ import Shop from '../pages/Shop/Shop.vue'
 import ShopGoods from '../pages/Shop/ShopGoods/ShopGoods.vue'
 import ShopRatings from '../pages/Shop/ShopRatings/ShopRatings.vue'
 import ShopInfo from '../pages/Shop/ShopInfo/ShopInfo.vue'
+import Article from  '../pages/Article/Article.vue'
+import ArticleInfo from '../pages/Article/ArticleInfo/ArticleInfo'
 Vue.use(VueRouter)
 export default new VueRouter({
   routes: [
@@ -52,6 +54,22 @@ export default new VueRouter({
       meta: {
         showFooter: true
       }
+    },
+    {
+      path: '/article',
+      name: 'Article',
+      component: Article,
+    },
+    {
+      path: '/articleinfo',
+      name: 'ArticleInfo',
+      component : ArticleInfo,
+      children: [
+        {
+          path: '',
+          component: ArticleInfo
+        }
+      ]
     },
     {
       path: '/',

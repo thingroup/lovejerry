@@ -1,10 +1,10 @@
 <template>
   <div class="cartcontrol">
     <transition name="move">
-      <div class="iconfont icon-remove_circle_outline" v-if="food.count" @click.stop="updateFoodCount(false)"></div>
+      <div class="iconfont icon-jian" v-if="food.count" @click.stop="updateFoodCount(false)"></div>
     </transition>
     <div class="cart-count" v-if="food.count">{{food.count}}</div>
-    <div class="iconfont icon-add_circle" @click.stop="updateFoodCount(true)"></div>
+    <div class="iconfont icon-icon-test2" @click.stop="updateFoodCount(true)"></div>
   </div>
 </template>
 
@@ -33,12 +33,12 @@
       font-size: 24px
       color: rgb(0, 160, 220)
 
-    .icon-remove_circle_outline
+    .icon-jian
       display: inline-block
       padding 6px
       line-height 24px
       font-size 24px
-      color $green
+      color cornflowerblue
       &.move-enter-active, &.move-leave-active
         transition all .3s
       &.move-enter, &.move-leave-to
@@ -53,10 +53,10 @@
       text-align: center
       font-size: 10px
       color: rgb(147, 153, 159)
-    .icon-add_circle
+    .icon-icon-test2
       display: inline-block
       padding: 6px
       line-height: 24px
       font-size: 24px
-      color $green
+      color cornflowerblue
 </style>
