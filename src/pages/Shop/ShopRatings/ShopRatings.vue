@@ -229,7 +229,7 @@
           color: rgb(77, 85, 93)
           background: rgba(77, 85, 93, 0.2)
           &.active
-            background: $green
+            background: cornflowerblue
             color: #fff
           .count
             margin-left: 2px
@@ -242,7 +242,7 @@
         font-size: 0
         &.on
           .icon-check_circle
-            color: $green
+            color: cornflowerblue
         .icon-check_circle
           display: inline-block
           vertical-align: top
