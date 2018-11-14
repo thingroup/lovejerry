@@ -9,11 +9,11 @@ import store from './store'
 import './mock/mockServer'
 
 // 注册全局组件标签
-Vue.component(Button.name, Button)  // <mt-button>
+Vue.component(Button.name, Button)
 
 new Vue({
   el: '#app',
   render: h => h(App),
-  router, //使用上vue-router
-  store, // 使用上vuex
+  router,
+  store
 })

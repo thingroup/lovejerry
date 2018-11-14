@@ -2,7 +2,7 @@
   <div class="shop-header">
     <nav class="shop-nav" :style="{backgroundImage: `url(${info.bgImg})`}">
       <a class="back" @click="$router.back()">
-        <i class="iconfont icon-arrow_left"></i>
+        <i class="iconfont icon-jiantou2"></i>
       </a>
     </nav>
     <div class="shop-content" @click="toggleShopShow">
@@ -79,7 +79,7 @@
             {{info.bulletin}}
           </div>
           <div class="mask-footer" @click="toggleShopShow">
-            <span class="iconfont icon-close"></span>
+            <span class="iconfont icon-guanbi"></span>
           </div>
         </div>
         <div class="brief-modal-cover"></div>
@@ -100,7 +100,7 @@
             </li>
           </ul>
           <div class="activity-sheet-close" @click="toggleSupportShow">
-            <span class="iconfont icon-close"></span>
+            <span class="iconfont icon-guanbi"></span>
           </div>
         </div>
         <div class="activity-sheet-cover"></div>
@@ -163,7 +163,7 @@
         position: absolute
         top: 10px
         left: 0
-        .icon-arrow_left
+        .icon-jiantou2
           display: block
           padding: 5px
           font-size: 20px

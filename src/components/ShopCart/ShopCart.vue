@@ -159,7 +159,7 @@
             text-align center
             background #2b343c
             &.highlight
-              background $green
+              background cornflowerblue
             .icon-gouwuche1
               line-height 44px
               font-size 24px
