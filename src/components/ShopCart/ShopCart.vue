@@ -13,7 +13,7 @@
           <div class="desc">另需配送费￥{{info.deliveryPrice}}元</div>
         </div>
         <div class="content-right">
-          <div class="pay" :class="payClass">
+          <div class="pay" :class="payClass" @click.stop.prevent="pay">
             {{payText}}
           </div>
         </div>
@@ -69,9 +69,9 @@
         const {totalPrice} = this
         const {minPrice} = this.info
         if(totalPrice===0) {
-          return `￥${minPrice}元起送`
+          return `￥${minPrice}元起预定`
         } else if(totalPrice<minPrice) {
-          return `还差￥${minPrice-totalPrice}元起送`
+          return `还差￥${minPrice-totalPrice}元起预定`
         } else {
           return '结算'
         }
@@ -115,7 +115,15 @@
         MessageBox.confirm('确定清空购物车吗?').then(action => {
           this.$store.dispatch('clearCart')
         }, () => {});
-      }
+      },
+      pay() {
+        if (this.totalPrice < this.minPrice) {
+          return;
+        }
+        window.cartFoods = JSON.stringify(this.cartFoods);
+        window.sellerPay = JSON.stringify(this.seller);
+        window.location.href = '#/payment';
+      },
     },
     components: {
       CartControl

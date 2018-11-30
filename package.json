@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "better-scroll": "^1.13.2",
+    "config": "^3.0.0",
     "element-ui": "^2.4.8",
     "mint-ui": "^2.2.13",
     "mock.js": "^0.2.0",
@@ -21,6 +22,7 @@
     "swiper": "^4.4.1",
     "vue": "^2.5.2",
     "vue-lazyload": "^1.2.6",
+    "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
@@ -72,7 +74,8 @@
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "less-loader": "^4.0.2"
   },
   "engines": {
     "node": ">= 6.0.0",

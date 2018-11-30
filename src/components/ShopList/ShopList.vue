@@ -5,47 +5,47 @@
           :key="index" @click="$router.push('/shop')">
         <a>
           <div class="shop_left">
-            <img class="shop_img" :src="baseImgUrl+shop.image_path">
+            <img class="shop_img" :src="shop.canteenIcon">
           </div>
           <div class="shop_right">
             <section class="shop_detail_header">
-              <h4 class="shop_title ellipsis">{{shop.name}}</h4>
-              <ul class="shop_detail_ul">
-                <li class="supports" v-for="(support, index) in shop.supports" :key="index">
-                  {{support.icon_name}}
-                </li>
-              </ul>
+              <h4 class="shop_title ellipsis">{{shop.canteenName}}</h4>
+              <!--<ul class="shop_detail_ul">-->
+                <!--<li class="supports" v-for="(support, index) in shop.supports" :key="index">-->
+                  <!--{{support.icon_name}}-->
+                <!--</li>-->
+              <!--</ul>-->
             </section>
             <section class="shop_rating_order">
               <section class="shop_rating_order_left">
-                <Star :score="shop.rating" :size="24"/>
+                <Star :score="shop.star" :size="24"/>
                 <div class="rating_section">
-                  {{shop.rating}}
+                  {{shop.canteenDescription}}
                 </div>
                 <div class="order_section">
-                  月售{{shop.recent_order_num}}单
+                  剩余包间{{shop.canteenRoomStock}}间
                 </div>
               </section>
               <section class="shop_rating_order_right">
-                <span class="delivery_style delivery_right">{{shop.delivery_mode.text}}</span>
+                <span class="delivery_style delivery_right">{{"保 准 票"}}</span>
               </section>
             </section>
             <section class="shop_distance">
               <p class="shop_delivery_msg">
-                <span>¥{{shop.float_minimum_order_amount}}人均</span>
+                <span>¥{{shop.personConsume}}人均</span>
                 <span class="segmentation">/</span>
-                <span>服务费约¥{{shop.float_delivery_fee}}</span>
+                <span>服务费约¥{{5}}</span>
               </p>
             </section>
           </div>
         </a>
       </li>
     </ul>
-    <ul v-else>
-      <li v-for="item in 6">
-        <img src="./images/shop_back.svg" alt="back">
-      </li>
-    </ul>
+    <!--<ul v-else>-->
+      <!--<li v-for="item in 6">-->
+        <!--<img src="./images/shop_back.svg" alt="back">-->
+      <!--</li>-->
+    <!--</ul>-->
   </div>
 </template>
 
