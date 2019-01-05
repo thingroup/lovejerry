@@ -1,168 +1,32 @@
 <template>
   <div class="news_container">
-    <ul class="news_list">
-      <li class="shop_li border-1px"
-         @click="$router.push('/articleinfo')">
+    <ul class="news_list" v-if="articleList.length">
+      <li class="shop_li border-1px" v-for="(article, index) in articleList":key="index"
+         @click="$router.push({path:'/articleinfo',query:{articleId:article.id}})">
         <a>
           <div class="shop_left">
             <img class="shop_img" src="./images/news/1.jpg">
           </div>
           <div class="shop_right">
             <section class="shop_detail_header">
-              <h4 class="shop_title ellipsis">别上火韩国料理点评</h4>
-              <ul class="shop_detail_ul">
-                <li class="supports">热门</li>
-                <li class="supports">精品</li>
-              </ul>
+              <h4 class="shop_title ellipsis">{{article.name}}</h4>
             </section>
+            <p class="text">{{article.text}}</p>
             <section class="shop_rating_order">
               <section class="shop_rating_order_left">
-                <div class="star star-24">
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item half"></span>
-                  <span class="star-item off"></span>
-                </div>
-                <div class="rating_section">
-                  3.6
-                </div>
+                <Star :score="article.score" :size="24"></Star>
+                <br/>
                 <div class="order_section">
-                  点赞数 200
+                  <Likes :canteenId="article.canteenId" :articleId="article.id" :status="article.status" :likes="article.likes" :dislikes="article.dislikes"></Likes>
                 </div>
               </section>
               <section class="shop_rating_order_right">
-                <span class="delivery_style delivery_right">社团优选</span>
+                <span class="delivery_style delivery_right">{{article.uname}}</span>
               </section>
             </section>
             <section class="shop_distance">
               <p class="shop_delivery_msg">
-                <span>日期：2018/9/30</span>
-              </p>
-            </section>
-          </div>
-        </a>
-      </li>
-      <li class="shop_li border-1px">
-        <a>
-          <div class="shop_left">
-            <img class="shop_img" src="./images/news/1.jpg">
-          </div>
-          <div class="shop_right">
-            <section class="shop_detail_header">
-              <h4 class="shop_title ellipsis">徒手餐厅菜品点评</h4>
-              <ul class="shop_detail_ul">
-                <li class="supports">热门</li>
-                <li class="supports">精品</li>
-              </ul>
-            </section>
-            <section class="shop_rating_order">
-              <section class="shop_rating_order_left">
-                <div class="star star-24">
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item off"></span>
-                </div>
-                <div class="rating_section">
-                  4.1
-                </div>
-                <div class="order_section">
-                  点赞数 116
-                </div>
-              </section>
-              <section class="shop_rating_order_right">
-                <span class="delivery_style delivery_right">甜蜜情侣</span>
-              </section>
-            </section>
-            <section class="shop_distance">
-              <p class="shop_delivery_msg">
-
-                <span>日期：2018/8/30</span>
-              </p>
-            </section>
-          </div>
-        </a>
-      </li>
-      <li class="shop_li border-1px">
-        <a>
-          <div class="shop_left">
-            <img class="shop_img" src="./images/news/1.jpg">
-          </div>
-          <div class="shop_right">
-            <section class="shop_detail_header">
-              <h4 class="shop_title ellipsis">山海阁点评</h4>
-              <ul class="shop_detail_ul">
-                <li class="supports">热门</li>
-                <li class="supports">精品</li>
-              </ul>
-            </section>
-            <section class="shop_rating_order">
-              <section class="shop_rating_order_left">
-                <div class="star star-24">
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item off"></span>
-                  <span class="star-item off"></span>
-                </div>
-                <div class="rating_section">
-                  3.2
-                </div>
-                <div class="order_section">
-                  点赞 106
-                </div>
-              </section>
-              <section class="shop_rating_order_right">
-                <span class="delivery_style delivery_right">班级聚餐</span>
-              </section>
-            </section>
-            <section class="shop_distance">
-              <p class="shop_delivery_msg">
-
-                <span>日期：2018/10/5</span>
-              </p>
-            </section>
-          </div>
-        </a>
-      </li>
-      <li class="shop_li border-1px">
-        <a>
-          <div class="shop_left">
-            <img class="shop_img" src="./images/news/1.jpg">
-          </div>
-          <div class="shop_right">
-            <section class="shop_detail_header">
-              <h4 class="shop_title ellipsis">青大食堂点评</h4>
-              <ul class="shop_detail_ul">
-                <li class="supports">热门</li>
-                <li class="supports">精品</li>
-              </ul>
-            </section>
-            <section class="shop_rating_order">
-              <section class="shop_rating_order_left">
-                <div class="star star-24">
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item on"></span>
-                  <span class="star-item half"></span>
-                  <span class="star-item off"></span>
-                </div>
-                <div class="rating_section">
-                  3.6
-                </div>
-                <div class="order_section">
-                  点赞 216
-                </div>
-              </section>
-              <section class="shop_rating_order_right">
-                <span class="delivery_style delivery_right">家人团聚</span>
-              </section>
-            </section>
-            <section class="shop_distance">
-              <p class="shop_delivery_msg">
-                <span>日期：2018/7/30</span>
+                <span>日期：{{article.time|date-format}}</span>
               </p>
             </section>
           </div>
@@ -173,9 +37,30 @@
 </template>
 
 <script>
-  export default {
-    name: 'ArticleList'
+import Star from '../../components/Star/Star.vue'
+import Likes from '../../components/likes/Likes.vue'
+const ERR_OK = 0
+export default {
+  name: 'ArticleList',
+  components:{Likes, Star},
+  data () {
+    return {
+      articleList: []
+    }
+  },
+  created () {
+    this.$http.get('http://localhost:8087/buyer/article/canteen/list').then((response) => {
+      response = response.body
+      if (response.code === ERR_OK) {
+        this.articleList = response.data
+      }
+    })
+  },
+  comments: {
+    Star,
+    Likes
   }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

@@ -5,22 +5,40 @@
   </a>
   <div style="margin-top: 25px;font-size: 20px" align="center"><p>文章详情</p></div>
   <div style="height: 600px ;margin-top: 25px">
-    <span>甜食是人类最简单最初始的美食体验，蜂蜜的主要成分是果糖和葡萄糖，
-      作为早期人类唯一的甜食，蜂蜜能快速产生热量，补充体力，这对我们的祖先至关重要，
-      和人工提炼的蔗糖不同，蜂蜜中的糖，不经过水解，就可以直接被人体吸收。在中国的厨房，无论制作菜肴还是甜点，蜂蜜都是其他糖类无法替代的。当然，白马甲最喜欢的是酥油蜂蜜</span>
+    <span>{{detail.uname}}:</span>
+    <br/>
+    <span style="word-break: break-word">{{detail.text}}</span>
+    <br/>
   </div>
-  <ArticleRatings></ArticleRatings>
+  <ArticleRatings :canteenId="detail.canteenId" :articleId="detail.id" :status="detail.status" :likes="detail.likes" :dislikes="detail.dislikes" :comments="comments" :score="detail.score"></ArticleRatings>
   <div></div>
 </div>
 </template>
 
 <script>
-  import ArticleRatings from '../../../components/ArticleRatings/ArticleRatings'
-  export default {
-    name: 'ArticleInfo',
-    components: {ArticleRatings},
-    comments: {ArticleRatings}
+  import Star from '../../../components/Star/Star.vue'
+import ArticleRatings from '../../../components/ArticleRatings/ArticleRatings'
+const ERR_OK=0
+export default {
+  name: 'ArticleInfo',
+  components: {ArticleRatings,Star},
+  comments: {ArticleRatings,Star},
+  data () {
+    return {
+      detail: '',
+      comments: []
+    }
+  },
+  created () {
+    this.$http.get('http://localhost:8087/buyer/article/canteen/detail?articleId=' + this.$route.query.articleId).then((response) => {
+      response = response.body
+      if (response.code === ERR_OK) {
+        this.detail = response.data.detail
+        this.comments = response.data.commentList
+      }
+    })
   }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

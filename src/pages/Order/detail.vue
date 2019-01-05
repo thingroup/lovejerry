@@ -71,92 +71,90 @@
 </template>
 
 <script>
-    var config = require('config')
-    config = process.env.NODE_ENV === 'development' ? config.dev : config.build
-    export default {
-        data() {
-           return {
-               order: {},
-               orderDetailList: [],
-               cancelOrderName: '取消订单'
-           }
-        },
-        created() {
-            this.$http.get('http://localhost:8087/buyer/order/details', {
-                params: {
-                    orderId: this.$route.params.orderId,
-                    openid: 'jerry'
-                }
-            }).then(function (response) {
-                this.order = response.body.data;
-                this.orderDetailList = this.order.orderDetailList;
-            })
-        },
-        filters: {
-            payName: function (value) {
-                if (value == 0) {
-                    return '货到付款'
-                }else {
-                    return '微信支付'
-                }
-微信支付            },
-            time: function (value) {
-                var date = new Date(value * 1000);
-                return date.getFullYear() + '-'
-                    + (date.getMonth() + 1) + '-'
-                    + date.getDate() + ' '
-                    + date.getHours() + ':'
-                    + date.getMinutes();
-            },
-            /**
+var config = require('config')
+config = process.env.NODE_ENV === 'development' ? config.dev : config.build
+export default {
+  data () {
+    return {
+      order: {},
+      orderDetailList: [],
+      cancelOrderName: '取消订单'
+    }
+  },
+  created () {
+    this.$http.get('http://localhost:8087/buyer/order/details', {
+      params: {
+        orderId: this.$route.params.orderId,
+        openid: 'jerry'
+      }
+    }).then(function (response) {
+      this.order = response.body.data
+      this.orderDetailList = this.order.orderDetailList
+    })
+  },
+  filters: {
+    payName: function (value) {
+      if (value == 0) {
+        return '货到付款'
+      } else {
+        return '微信支付'
+      }
+      微信支付
+    },
+    time: function (value) {
+      var date = new Date(value * 1000)
+      return date.getFullYear() + '-' +
+                    (date.getMonth() + 1) + '-' +
+                    date.getDate() + ' ' +
+                    date.getHours() + ':' +
+                    date.getMinutes()
+    },
+    /**
              * 待接单: orderStatus = 0
              * 订单已完结: orderStatus = 1
              * 订单已取消: orderStatus = 2
              * @param value
              */
-            orderStatusName: function (value) {
-                if (value == 0) {
-                    return '待接单'
-                }else if (value == 1) {
-                    return '订单已完结'
-                }else if (value == 2){
-                    return '订单已取消'
-                }else {
-                    return ''
-                }
-            }
-        },
-        methods: {
-            cancelOrder: function (orderId) {
-                this.cancelOrderName = '取消中...'
-                this.$http.post('http://localhost:8087/buyer/order/cancel', {
-                    orderId: orderId,
-                    openid: 'jerry'
-                }).then(function (response) {
-                    response = response.body
-                    if (response.code == 0) {
-                        location.reload()
-                    }else {
-                        alert('取消订单失败:' + response.msg)
-                    }
-                });
-            },
-            pay: function (orderId) {
-                location.href = config.wechatPayUrl +
+    orderStatusName: function (value) {
+      if (value == 0) {
+        return '待接单'
+      } else if (value == 1) {
+        return '订单已完结'
+      } else if (value == 2) {
+        return '订单已取消'
+      } else {
+        return ''
+      }
+    }
+  },
+  methods: {
+    cancelOrder: function (orderId) {
+      this.cancelOrderName = '取消中...'
+      this.$http.post('http://localhost:8087/buyer/order/cancel', {
+        orderId: orderId,
+        openid: 'jerry'
+      }).then(function (response) {
+        response = response.body
+        if (response.code == 0) {
+          location.reload()
+        } else {
+          alert('取消订单失败:' + response.msg)
+        }
+      })
+    },
+    pay: function (orderId) {
+      location.href = config.wechatPayUrl +
                     '?openid=' + getCookie('openid') +
                     '&orderId=' + orderId +
-                    '&returnUrl=' + encodeURIComponent(config.sellUrl + '/#/order/' + orderId);
-            }
-        }
+                    '&returnUrl=' + encodeURIComponent(config.sellUrl + '/#/order/' + orderId)
     }
-    function getCookie(name) {
-        var arr;
-        var reg = new RegExp('(^| )' +name+"=([^;]*)(;|$)");
-        if(arr=document.cookie.match(reg))
-            return unescape(arr[2]);
-        else
-            return null;
-    }
+  }
+}
+function getCookie (name) {
+  var arr
+  var reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
+  if (arr = document.cookie.match(reg)) { return unescape(arr[2]) } else { return null }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
