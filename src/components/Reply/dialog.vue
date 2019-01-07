@@ -1,8 +1,13 @@
 <template>
     <div class="dialog" v-show="showMask">
         <div class="dialog-container">
-            <div class="dialog-title">{{title}}</div>
-            <div class="content" v-html="content"></div>
+            <div v-if="commentId=='*'">
+              <div class="dialog-title">评论 : {{luname}}:</div>
+            </div>
+          <div v-else>
+            <div class="dialog-title">回复 @ : {{luname}}:</div>
+          </div>
+            <textarea class="content" v-model="text"></textarea>
             <div class="btns">
                 <div v-if="type != 'confirm'" class="default-btn" @click="closeBtn">
                     {{cancelText}}
@@ -10,11 +15,7 @@
                 <div v-if="type == 'danger'" class="danger-btn" @click="dangerBtn">
                     {{dangerText}}
                 </div>
-                <div v-if="type == 'confirm'" class="confirm-btn" @click="confirmBtn">
-                    {{confirmText}}
-                </div>
             </div>
-            <div class="close-btn" @click="closeMask"><i class="iconfont icon-close"></i></div>
         </div>
 
     </div>
@@ -22,31 +23,26 @@
 <script>
 export default {
   props: {
+    articleId: Number,
+    commentId: '',
+    luname: '',
+    luid: '',
+    text: '',
+    req: '',
     value: {},
     // 类型包括 defalut 默认， danger 危险， confirm 确认，
     type: {
       type: String,
       default: 'default'
     },
-    content: {
-      type: String,
-      default: ''
-    },
-    title: {
-      type: String,
-      default: ''
-    },
+    title: '',
     cancelText: {
       type: String,
       default: '取消'
     },
     dangerText: {
       type: String,
-      default: '删除'
-    },
-    confirmText: {
-      type: String,
-      default: '确认'
+      default: '发送'
     }
   },
   data () {
@@ -64,11 +60,41 @@ export default {
     },
     dangerBtn () {
       this.$emit('danger')
+      if (this.req === 1) {
+        if (this.commentId !== '*') {
+          var url = 'http://localhost:8087/buyer/article/canteen/createComment?' +
+            'articleId=' + this.articleId +
+            '&commentText=' + this.text +
+            '&lastUid=' + this.luid +
+            '&lastUname=' + this.luname
+          this.$http.post(url).then(function (response) {
+          })
+        } else {
+          var url1 = 'http://localhost:8087/buyer/article/canteen/createComment?' +
+            'articleId=' + this.articleId +
+            '&commentText=' + this.text
+          this.$http.post(url1).then(function (response) {
+          })
+        }
+      } else if (this.req === 0) {
+        if (this.commentId !== '*') {
+          var url = 'http://localhost:8087/buyer/article/createComment?' +
+            'articleId=' + this.articleId +
+            '&commentText=' + this.text +
+            '&lastUid=' + this.luid +
+            '&lastUname=' + this.luname
+          this.$http.post(url).then(function (response) {
+          })
+        } else {
+          var url1 = 'http://localhost:8087/buyer/article/createComment?' +
+            'articleId=' + this.articleId +
+            '&commentText=' + this.text
+          this.$http.post(url1).then(function (response) {
+          })
+        }
+      }
       this.closeMask()
-    },
-    confirmBtn () {
-      this.$emit('confirm')
-      this.closeMask()
+      location.reload()
     }
   },
   mounted () {
@@ -84,25 +110,25 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixins.styl"
     .dialog{
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: 9999;
+        position: fixed
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+        background: rgba(0, 0, 0, 0.6)
+        z-index: 999
         .dialog-container{
-            width: 500px;
-            height: 380px;
-            background: #ffffff;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 8px;
-            position: relative;
+            width: 100%
+            height: 220px
+            background: lightblue
+            top: 200px
+            left: 50%
+            transform: translate(-50%, -50%)
+            border-radius: 8px
+            position: relative
             .dialog-title{
                 width: 100%;
                 height: 60px;
@@ -113,6 +139,10 @@ export default {
                 box-sizing: border-box;
             }
             .content{
+                border-radius: 0
+                width: 100%
+                height:100px
+                font-size:20px
                 color: #797979;
                 line-height: 26px;
                 padding: 0 20px;
@@ -120,8 +150,8 @@ export default {
             }
             .inp{
                 margin: 10px 0 0 20px;
-                width: 200px;
-                height: 40px;
+                width: 40%;
+                height: 8%;
                 padding-left: 4px;
                 border-radius: 4px;
                 border: none;
@@ -166,27 +196,6 @@ export default {
                     &:active{
                         background: #EF8C8C;
                     }
-                }
-                .confirm-btn{
-                    color: #ffffff;
-                    background: #509EE3;
-                    &:hover{
-                        background: #6FB0EB;
-                    }
-                }
-            }
-            .close-btn{
-                position: absolute;
-                top: 16px;
-                right: 16px;
-                width: 30px;
-                height: 30px;
-                line-height: 30px;
-                text-align: center;
-                font-size: 18px;
-                cursor: pointer;
-                &:hover{
-                    font-weight: 600;
                 }
             }
         }

@@ -38,7 +38,7 @@
             </div>
             <span>吃货交友</span>
           </a>
-          <a href="javascript:" class="link_to_food">
+          <a href="javascript:" class="link_to_food" @click="$router.push('/createArticle')">
             <div class="food_container">
               <img src="./images/1.png">
             </div>
@@ -50,29 +50,32 @@
       <div class="swiper-pagination"></div>
     </div>
   </nav>
+    <div class="title">
+      <span style="margin-left: 30%;font-size: 30px">我的文章</span>
+    </div>
   <NewList></NewList>
   </div>
   <!--<router-view/>-->
 </template>
 
 <script>
-  import Swiper from 'swiper'
-  import 'swiper/dist/css/swiper.min.css'
-  import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
-  import NewList from '../../components/NewsList/NewsList'
-  export default {
-    components: {NewList, HeaderTop},
-    name: 'FoodieGroup',
-    mounted ()  {
-      //  创建一个swiper来实现轮播
-      new Swiper('.swiper-container',{
-        loop: true,//循环轮播
-        pagination: {
-          el: '.swiper-pagination',
-        },
-      })
-    }
+import Swiper from 'swiper'
+import 'swiper/dist/css/swiper.min.css'
+import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
+import NewList from '../../components/NewsList/NewsList'
+export default {
+  components: {NewList, HeaderTop},
+  name: 'FoodieGroup',
+  mounted () {
+    //  创建一个swiper来实现轮播
+    new Swiper('.swiper-container', {
+      loop: true, // 循环轮播
+      pagination: {
+        el: '.swiper-pagination'
+      }
+    })
   }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

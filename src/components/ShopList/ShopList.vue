@@ -2,7 +2,7 @@
   <div class="shop_container">
     <ul class="shop_list" v-if="shops.length">
       <li class="shop_li border-1px" v-for="(shop, index) in shops"
-          :key="index" @click="$router.push('/shop')">
+          :key="index" @click="$router.push({path:'/shop',query:{canteenId:shop.canteenId}})">
         <a>
           <div class="shop_left">
             <img class="shop_img" :src="shop.canteenIcon">
@@ -50,22 +50,22 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  import Star from '../Star/Star.vue'
+import {mapState} from 'vuex'
+import Star from '../Star/Star.vue'
 
-  export default {
-    data () {
-      return {
-        baseImgUrl: 'http://cangdu.org:8001/img/'
-      }
-    },
-    computed: {
-      ...mapState(['shops'])
-    },
-    components: {
-      Star
+export default {
+  data () {
+    return {
+      baseImgUrl: 'http://cangdu.org:8001/img/'
     }
+  },
+  computed: {
+    ...mapState(['shops'])
+  },
+  components: {
+    Star
   }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

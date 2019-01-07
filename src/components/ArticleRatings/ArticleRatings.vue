@@ -8,8 +8,20 @@
             <span style="font-size: 25px" class="title">作者评分</span>
             <Star style="margin-left: 0%" :score="score" :size="48" />
           </div>
-          <Likes style="margin-left: 65%" :articleId="articleId" :canteenId="canteenId"
-                 :status="status" :likes="likes" :dislikes="dislikes"></Likes>
+          <table width="100%">
+            <tr>
+              <td>
+                <div style="margin-left: 30%;color: cornflowerblue;font-size: 15px" class="reply_btn" @click="openMask('*',id,name)">
+                  评论
+                </div>
+              </td>
+              <td>
+                <Likes style="margin-left: 30%" :req="1" :articleId="articleId" :canteenId="canteenId"
+                       :status="status" :likes="likes" :dislikes="dislikes">
+                </Likes>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
       <div style="text-align: center" class="split">
@@ -23,18 +35,34 @@
             </div>
             <div class="content">
               <h1 class="name">{{comment.uname}}</h1>
-              <p style="word-break: break-word" class="text">{{comment.text}}</p>
+              <p v-if="comment.lid==''" style="word-break: break-word" class="text">{{comment.text}}</p>
+              <p v-else style="word-break: break-word" class="text">@{{comment.lname}} :<br/> {{comment.text}}</p>
               <div class="time">{{comment.time | date-format}}</div>
-              <br/>
-              <div style="font-size: 15px" class="reply_btn" @click="showReplyform(comment.id,comment.uname,comment.uid)">回复
-              </div>
-              <Likes  style="margin-left: 65%" :commentId="comment.id" :articleId="articleId"
-                      :status="comment.status" :likes="comment.likes" :dislikes="comment.dislikes"></Likes>
+              <table style="width: 100%">
+                <tr>
+                  <td>
+                    <div style="color: cornflowerblue;font-size: 15px" class="reply_btn" @click="openMask(comment.id,comment.uid,comment.uname)">
+                      回复
+                    </div>
+                  </td>
+                  <td>
+                    <Likes :size="22" :req="1" style="margin-left: 30%" :commentId="comment.id" :articleId="articleId"
+                           :status="comment.status" :likes="comment.likes" :dislikes="comment.dislikes">
+                    </Likes>
+                  </td>
+                </tr>
+              </table>
             </div>
           </li>
         </ul>
       </div>
-      <replyForm v-show="isActive" :article-id="articleId" :comment-id="commentId" :luname="luname" :luid="luid"></replyForm>
+      <div>
+        <dialog-bar :req="1" v-model="sendVal" type="danger" :luname="luname" :luid="luid"
+                    :articleId="articleId" :commentId="commentId"
+                    v-on:cancel="clickCancel()"
+                    @danger="clickDanger()" @confirm="clickConfirm()" >
+        </dialog-bar>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +72,8 @@ import BScroll from 'better-scroll'
 import {mapState, mapGetters} from 'vuex'
 import Star from '../../components/Star/Star.vue'
 import Likes from '../../components/likes/Likes.vue'
-import replyForm from '../../components/Reply/ReplyForm.vue'
+import dialogBar from '../../components/Reply/dialog.vue'
+
 export default {
   props: {
     comments: [],
@@ -53,7 +82,9 @@ export default {
     dislikes: '',
     status: '',
     articleId: '',
-    canteenId: ''
+    canteenId: '',
+    id:'',
+    name:''
   },
   data () {
     return {
@@ -62,7 +93,9 @@ export default {
       commentId: '',
       luid: '',
       luname: '',
-      isActive:false
+      reply: '',
+      sendVal: false,
+      comments: []
     }
   },
   mounted () {
@@ -106,27 +139,26 @@ export default {
     toggleOnlyShowText () {
       this.onlyShowText = !this.onlyShowText
     },
-    showReplyform: function (cid, lname, lid) {
-      if(this.isActive){
-        if(this.commentId==cid){
-          this.isActive=false
-        }else{
-          this.commentId = cid
-          this.luname = lname
-          this.luid = lid
-        }
-      }else{
-        this.commentId = cid
-        this.luname = lname
-        this.luid = lid
-        this.isActive=true
-      }
+    openMask (cid,uid,uname) {
+      this.luid=uid
+      this.luname=uname
+      this.commentId=cid
+      this.sendVal = true
+    },
+    clickCancel () {
+      console.log('点击了取消')
+    },
+    clickDanger () {
+      console.log('这里是danger回调')
+    },
+    clickConfirm () {
+      console.log('点击了confirm')
     }
   },
   components: {
     Star,
     Likes,
-    replyForm
+    dialogBar
   }
 }
 </script>

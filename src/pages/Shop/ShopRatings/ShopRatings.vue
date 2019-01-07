@@ -18,10 +18,6 @@
             <Star :score="info.foodScore" :size="36" />
             <span class="score">{{info.foodScore}}</span>
           </div>
-          <div class="delivery-wrapper">
-            <span class="title">送达时间</span>
-            <span class="delivery">{{info.deliveryTime}}分钟</span>
-          </div>
         </div>
       </div>
 
@@ -47,66 +43,118 @@
 
       <div class="rating-wrapper">
         <ul>
-          <li class="rating-item" v-for="(rating, index) in filterRatings" :key="index">
+          <li class="rating-item" v-for="(article, index) in articleList" :key="index">
             <div class="avatar">
-              <img width="28" height="28" :src="rating.avatar">
+              <img width="28" height="28" :src="article.id">
             </div>
             <div class="content">
-              <h1 class="name">{{rating.username}}</h1>
+              <h1 class="name">{{article.uname}}</h1>
               <div class="star-wrapper">
-                <Star :score="rating.score" :size="24" />
-                <span class="delivery">{{rating.deliveryTime}}</span>
+                <Star :score="article.score" :size="24" />
               </div>
-              <p class="text">{{rating.text}}</p>
+              <br/>
+              <p class="text" style="word-break: break-word">{{article.text}}</p>
               <div class="recommend">
-                <span class="iconfont" :class="rating.rateType===0 ? 'icon-thumb_up' : 'icon-thumb_down'"></span>
-                <span class="item" v-for="(item, index) in rating.recommend" :key="index">{{item}}</span>
+                <span class="item" v-for="(item, i) in article.productNames" :key="i">{{item}}</span>
               </div>
-              <div class="time">{{rating.rateTime | date-format}}</div>
+              <div class="time">{{article.time | date-format}}</div>
+              <table style="width: 100%">
+                <tr>
+                  <td>
+                    <div @click="showComment(index)" class="reply">
+                      <div v-if="article.comments.length>0">
+                        <span style="color:cornflowerblue;font-size: 13px">追问（{{article.comments.length}}）</span>
+                      </div>
+                      <div v-else>
+                        <span style="color: deepskyblue;font-size: 13px">追问</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="color: cornflowerblue;font-size: 13px" class="reply_btn" @click="openMask(article.id,article.uid,article.uname)">
+                      提问
+                    </div>
+                  </td>
+                  <td>
+                    <Likes :size="20" style="margin-left: 15%" :req="0" :articleId="article.id"
+                           :status="article.status" :likes="article.likes" :dislikes="article.dislikes">
+                    </Likes>
+                  </td>
+                </tr>
+              </table>
+              <div v-if="article.role==1">
+                <hr style="width: 100%;color: #7e8c8d"/>
+                <CommentList v-on:callback="setReply" :article-id="article.id" :canteen-id="canteenId" :comments="article.comments"></CommentList>
+              </div>
             </div>
           </li>
         </ul>
       </div>
+      <dialog-bar :req="0" style="margin-top: 10%" v-show="isShow" v-model="sendVal" type="danger" :luname="luname" :luid="luid"
+                  :articleId="articleId" :commentId="commentId"
+                  v-on:cancel="clickCancel()"
+                  @danger="clickDanger()" @confirm="clickConfirm()" >
+      </dialog-bar>
     </div>
   </div>
 </template>
 
-
 <script>
-  import BScroll from 'better-scroll'
-  import {mapState, mapGetters} from 'vuex'
-  import Star from '../../../components/Star/Star.vue'
-
-  export default {
-
-    data () {
-      return {
-        onlyShowText: true, // 是否只显示有文本的
-        selectType: 2 , // 选择的评价类型: 0满意, 1不满意, 2全部
+import BScroll from 'better-scroll'
+import {mapState, mapGetters} from 'vuex'
+import Star from '../../../components/Star/Star.vue'
+import Likes from '../../../components/likes/Likes.vue'
+import CommentList from '../../../components/CommentList/CommentList.vue'
+import dialogBar from '../../../components/Reply/dialog.vue'
+const ERR_OK = 0
+export default {
+  data () {
+    return {
+      onlyShowText: true, // 是否只显示有文本的
+      selectType: 2, // 选择的评价类型: 0满意, 1不满意, 2全部
+      articleList: [],
+      showedIndex: Number,
+      canteenId: '',
+      reply: [],
+      commentId: '',
+      luname: '',
+      luid: '',
+      articleId: '',
+      isShow: false
+    }
+  },
+  created () {
+    this.canteenId = this.$route.query.canteenId
+    this.$http.get('http://localhost:8087/buyer/article/list?canteenId=' + this.$route.query.canteenId).then((response) => {
+      response = response.body
+      if (response.code === ERR_OK) {
+        this.articleList = response.data
+        this.showedIndex = -1
       }
-    },
-    mounted () {
-      this.$store.dispatch('getShopRatings', () => {
-        this.$nextTick(() => {
-          new BScroll(this.$refs.ratings, {
-            click: true
-          })
+    })
+  },
+  mounted () {
+    this.$store.dispatch('getShopRatings', () => {
+      this.$nextTick(() => {
+        new BScroll(this.$refs.ratings, {
+          click: true
         })
       })
-    },
+    })
+  },
 
-    computed: {
-      ...mapState(['info', 'ratings']),
-      ...mapGetters(['positiveSize']),
+  computed: {
+    ...mapState(['info', 'ratings']),
+    ...mapGetters(['positiveSize']),
 
-      filterRatings () {
-        // 得到相关的数据
-        const {ratings, onlyShowText, selectType} = this
+    filterRatings () {
+      // 得到相关的数据
+      const {ratings, onlyShowText, selectType} = this
 
-        // 产生一个过滤新数组
-        return ratings.filter(rating => {
-          const {rateType, text} = rating
-          /*
+      // 产生一个过滤新数组
+      return ratings.filter(rating => {
+        const {rateType, text} = rating
+        /*
             条件1:
                 selectType: 0/1/2
                 rateType: 0/1
@@ -116,24 +164,56 @@
                 text: 有值/没值
                 !onlyShowText || text.length>0
            */
-          return (selectType===2 || selectType===rateType) && (!onlyShowText || text.length>0)
-        })
-      }
-    },
+        return (selectType === 2 || selectType === rateType) && (!onlyShowText || text.length > 0)
+      })
+    }
+  },
 
-    methods: {
-      setSelectType (selectType) {
-        this.selectType = selectType
-      },
-      toggleOnlyShowText () {
-        this.onlyShowText = !this.onlyShowText
+  methods: {
+    setReply (data) {
+      this.commentId = data.commentId
+      this.luid = data.uid
+      this.luname = data.uname
+      this.articleId = data.articleId
+      this.isShow = true
+    },
+    openMask (aid, uid, uname) {
+      this.commentId = '*'
+      this.luid = uid
+      this.luname = uname
+      this.articleId = aid
+      this.isShow = true
+    },
+    clickCancel () {
+      this.isShow = false
+    },
+    setSelectType (selectType) {
+      this.selectType = selectType
+    },
+    toggleOnlyShowText () {
+      this.onlyShowText = !this.onlyShowText
+    },
+    showComment (index) {
+      if (!this.articleList[index].role) {
+        this.articleList[index].role = 1
+        if (this.showedIndex >= 0) {
+          this.articleList[this.showedIndex].role = 0
+        }
+        this.showedIndex = index
+      } else {
+        this.articleList[index].role = 0
+        this.showedIndex = -1
       }
-    },
+    }
+  },
 
-    components: {
-      Star
-    },
+  components: {
+    Star,
+    Likes,
+    CommentList,
+    dialogBar
   }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -197,16 +277,6 @@
             vertical-align: top
             font-size: 12px
             color: rgb(255, 153, 0)
-        .delivery-wrapper
-          font-size: 0
-          .title
-            line-height: 18px
-            font-size: 12px
-            color: rgb(7, 17, 27)
-          .delivery
-            margin-left: 12px
-            font-size: 12px
-            color: rgb(147, 153, 159)
     .split
       width: 100%
       height: 16px

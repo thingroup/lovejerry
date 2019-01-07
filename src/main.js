@@ -11,6 +11,7 @@ import VueResource from 'vue-resource'
 import './mock/mockServer'
 import loading from './common/imgs/loading.gif'
 import './fiters'
+import $ from 'jquery'
 // 注册全局组件标签
 Vue.component(Button.name, Button)  // <mt-button>
 Vue.use(VueResource);

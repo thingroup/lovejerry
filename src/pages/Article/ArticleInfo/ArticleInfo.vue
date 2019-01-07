@@ -3,26 +3,26 @@
   <a href="javascript:" class="go_back" @click="$router.back()">
     <i class="iconfont icon-jiantou2"></i>
   </a>
-  <div style="margin-top: 25px;font-size: 20px" align="center"><p>文章详情</p></div>
+  <div style="margin-top: 25px;font-size: 20px" align="center"><p>{{detail.name}}</p></div>
   <div style="height: 600px ;margin-top: 25px">
     <span>{{detail.uname}}:</span>
     <br/>
     <span style="word-break: break-word">{{detail.text}}</span>
     <br/>
   </div>
-  <ArticleRatings :canteenId="detail.canteenId" :articleId="detail.id" :status="detail.status" :likes="detail.likes" :dislikes="detail.dislikes" :comments="comments" :score="detail.score"></ArticleRatings>
-  <div></div>
+  <ArticleRatings :id="detail.uid" :name="detail.uname" :canteenId="detail.canteenId" :articleId="detail.id" :status="detail.status" :likes="detail.likes" :dislikes="detail.dislikes" :comments="comments" :score="detail.score"></ArticleRatings>
 </div>
 </template>
 
 <script>
-  import Star from '../../../components/Star/Star.vue'
+import Star from '../../../components/Star/Star.vue'
 import ArticleRatings from '../../../components/ArticleRatings/ArticleRatings'
-const ERR_OK=0
+const ERR_OK = 0
 export default {
+  inject: ['reload'],
   name: 'ArticleInfo',
-  components: {ArticleRatings,Star},
-  comments: {ArticleRatings,Star},
+  components: {ArticleRatings, Star},
+  comments: {ArticleRatings, Star},
   data () {
     return {
       detail: '',
@@ -30,13 +30,18 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://localhost:8087/buyer/article/canteen/detail?articleId=' + this.$route.query.articleId).then((response) => {
-      response = response.body
-      if (response.code === ERR_OK) {
-        this.detail = response.data.detail
-        this.comments = response.data.commentList
-      }
-    })
+    this.getlist()
+  },
+  methods: {
+    getlist () {
+      this.$http.get('http://localhost:8087/buyer/article/canteen/detail?articleId=' + this.$route.query.articleId).then((response) => {
+        response = response.body
+        if (response.code === ERR_OK) {
+          this.detail = response.data.detail
+          this.comments = response.data.commentList
+        }
+      })
+    }
   }
 }
 </script>

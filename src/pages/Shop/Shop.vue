@@ -6,7 +6,7 @@
         <router-link to="/shop/goods" replace>点餐</router-link>
       </div>
       <div class="tab-item">
-        <router-link to="/shop/ratings" replace>评价</router-link>
+        <a @click="$router.push({path:'/shop/ratings',query:{canteenId:canteenId}})" replace>评价</a>
       </div>
       <div class="tab-item">
         <router-link to="/shop/info" replace>商家</router-link>
@@ -19,16 +19,23 @@
 </template>
 
 <script>
-  import ShopHeader from '../../components/ShopHeader/ShopHeader.vue'
-
-  export default {
-    mounted () {
-      this.$store.dispatch('getShopInfo')
-    },
-    components: {
-      ShopHeader
+import ShopHeader from '../../components/ShopHeader/ShopHeader.vue'
+export default {
+  data () {
+    return {
+      canteenId: ''
     }
+  },
+  created () {
+    this.canteenId = this.$route.query.canteenId
+  },
+  mounted () {
+    this.$store.dispatch('getShopInfo')
+  },
+  components: {
+    ShopHeader
   }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

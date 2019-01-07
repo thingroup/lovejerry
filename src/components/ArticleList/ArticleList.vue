@@ -17,7 +17,7 @@
                 <Star :score="article.score" :size="24"></Star>
                 <br/>
                 <div class="order_section">
-                  <Likes :canteenId="article.canteenId" :articleId="article.id" :status="article.status" :likes="article.likes" :dislikes="article.dislikes"></Likes>
+                  <Likes :req="1" :canteenId="article.canteenId" :articleId="article.id" :status="article.status" :likes="article.likes" :dislikes="article.dislikes"></Likes>
                 </div>
               </section>
               <section class="shop_rating_order_right">
@@ -41,8 +41,9 @@ import Star from '../../components/Star/Star.vue'
 import Likes from '../../components/likes/Likes.vue'
 const ERR_OK = 0
 export default {
+  inject: ['reload'],
   name: 'ArticleList',
-  components:{Likes, Star},
+  components: {Likes, Star},
   data () {
     return {
       articleList: []
@@ -55,6 +56,11 @@ export default {
         this.articleList = response.data
       }
     })
+  },
+  methods: {
+    reload () {
+      this.reload()
+    }
   },
   comments: {
     Star,

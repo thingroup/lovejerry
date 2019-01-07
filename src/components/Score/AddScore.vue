@@ -1,6 +1,6 @@
 <template>
   <div class="star" :class="'star-'+size">
-    <span class="star-item" v-for="(sc, index) in starClasses" :class="sc" :key="index"></span>
+    <span  v-on:click="addScore(index)" class="star-item" v-for="(sc, index) in starClasses" :class="sc" :key="index"></span>
   </div>
 </template>
 
@@ -12,15 +12,19 @@ const CLASS_OFF = 'off'
 
 export default {
   props: {
-    score: Number,
     size: Number
   },
-  name :'Star',
+  data () {
+    return {
+      score: Number
+    }
+  },
+  name: 'AddScore',
   computed: {
     /*
-      3.2: 3 + 0 + 2
-      3.5: 3 + 1 + 1
-       */
+        3.2: 3 + 0 + 2
+        3.5: 3 + 1 + 1
+         */
     starClasses () {
       const {score} = this
       const scs = []
@@ -37,8 +41,13 @@ export default {
       while (scs.length < 5) {
         scs.push(CLASS_OFF)
       }
-
       return scs
+    }
+  },
+  methods: {
+    addScore: function (index) {
+      this.score = index + 1
+      this.$emit('callback', index + 1)
     }
   }
 }

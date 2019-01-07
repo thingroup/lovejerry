@@ -13,11 +13,17 @@ import ShopInfo from '../pages/Shop/ShopInfo/ShopInfo.vue'
 import Article from  '../pages/Article/Article.vue'
 import ArticleInfo from '../pages/Article/ArticleInfo/ArticleInfo'
 import Payment from '../pages/payment/Payment'
-import orderDetail from '../pages/Order/detail';
+import orderDetail from '../pages/Order/detail'
+import CreateArticle from '../pages/Article/Create/CreateArticle.vue'
 Vue.use(VueRouter)
 
 export default new VueRouter({
   routes: [
+    {
+      path: '/createArticle',
+      name: 'CreateArticle',
+      component: CreateArticle
+    },
     {
       path: '/msite',
       name: 'MSite',
