@@ -15,6 +15,11 @@
                   评论
                 </div>
               </td>
+              <td v-if="userInfo.id" @click="deletea">
+                <div style="color: cornflowerblue;font-size: 15px" class="reply_btn">
+                  删除
+                </div>
+              </td>
               <td>
                 <Likes style="margin-left: 30%" :req="1" :articleId="articleId" :canteenId="canteenId"
                        :status="status" :likes="likes" :dislikes="dislikes">
@@ -108,7 +113,7 @@ export default {
     })
   },
   computed: {
-    ...mapState(['info', 'ratings']),
+    ...mapState(['info', 'ratings','userInfo']),
     ...mapGetters(['positiveSize']),
 
     filterRatings () {
@@ -133,6 +138,9 @@ export default {
     }
   },
   methods: {
+    deletea : function() {
+
+    },
     setSelectType (selectType) {
       this.selectType = selectType
     },

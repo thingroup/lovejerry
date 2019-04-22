@@ -39,6 +39,7 @@
 <script>
 import Star from '../../components/Star/Star.vue'
 import Likes from '../../components/likes/Likes.vue'
+import {mapState} from 'vuex'
 const ERR_OK = 0
 export default {
   inject: ['reload'],
@@ -47,15 +48,20 @@ export default {
   data () {
     return {
       articleList: [],
-      isLogin: true
+      isLogin: true,
+      alertText: '', // 提示文本
+      alertShow: false // 是否显示警告框
     }
   },
+  computed: {
+    ...mapState(['userInfo'])
+  },
   created () {
-    this.$http.get('http://localhost:8087/buyer/article/canteen/mylist').then((response) => {
+    this.$http.get('http://localhost:8087/buyer/article/canteen/mylist?userId=' + this.userInfo.id + '&userName=' + encodeURI(this.userInfo.name)).then((response) => {
       response = response.body
       if (response.code === ERR_OK) {
         this.articleList = response.data
-      }else{
+      } else {
         this.isLogin = false
       }
     })

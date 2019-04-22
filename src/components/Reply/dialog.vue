@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="dialog" v-show="showMask">
         <div class="dialog-container">
             <div v-if="commentId=='*'">
@@ -17,11 +18,17 @@
                 </div>
             </div>
         </div>
-
+    </div>
+      <AlertTip :alertText="alertText" v-show="alertShow" @closeTip="closeTip"/>
     </div>
 </template>
 <script>
+import AlertTip from '../../components/AlertTip/AlertTip.vue'
+import {mapState} from 'vuex'
 export default {
+  components: {
+    AlertTip
+  },
   props: {
     articleId: Number,
     commentId: '',
@@ -47,10 +54,24 @@ export default {
   },
   data () {
     return {
-      showMask: false
+      showMask: false,
+      alertText: '', // 提示文本
+      alertShow: false // 是否显示警告框
     }
   },
+  computed: {
+    ...mapState(['userInfo'])
+  },
   methods: {
+    showAlert: function (alertText) {
+      this.alertShow = true
+      this.alertText = alertText
+    },
+    // 关闭警告框
+    closeTip () {
+      this.alertShow = false
+      this.alertText = ''
+    },
     closeMask () {
       this.showMask = false
     },
@@ -59,6 +80,11 @@ export default {
       this.closeMask()
     },
     dangerBtn () {
+      if (this.userInfo.id == null) {
+        this.closeMask()
+        this.showAlert('您尚未登录')
+        return
+      }
       this.$emit('danger')
       if (this.req === 1) {
         if (this.commentId !== '*') {
@@ -66,13 +92,17 @@ export default {
             'articleId=' + this.articleId +
             '&commentText=' + this.text +
             '&lastUid=' + this.luid +
-            '&lastUname=' + this.luname
+            '&lastUname=' + encodeURI(this.luname) +
+            '&userId=' + this.userInfo.id +
+            '&userName=' + encodeURI(this.userInfo.name)
           this.$http.post(url).then(function (response) {
           })
         } else {
           var url1 = 'http://localhost:8087/buyer/article/canteen/createComment?' +
             'articleId=' + this.articleId +
-            '&commentText=' + this.text
+            '&commentText=' + this.text +
+            '&userId=' + this.userInfo.id +
+            '&userName=' + encodeURI(this.userInfo.name)
           this.$http.post(url1).then(function (response) {
           })
         }
@@ -82,13 +112,17 @@ export default {
             'articleId=' + this.articleId +
             '&commentText=' + this.text +
             '&lastUid=' + this.luid +
-            '&lastUname=' + this.luname
+            '&lastUname=' + encodeURI(this.luname) +
+            '&userId=' + this.userInfo.id +
+            '&userName=' + encodeURI(this.userInfo.name)
           this.$http.post(url).then(function (response) {
           })
         } else {
           var url1 = 'http://localhost:8087/buyer/article/createComment?' +
             'articleId=' + this.articleId +
-            '&commentText=' + this.text
+            '&commentText=' + this.text +
+            '&userId=' + this.userInfo.id +
+            '&userName=' + encodeURI(this.userInfo.name)
           this.$http.post(url1).then(function (response) {
           })
         }

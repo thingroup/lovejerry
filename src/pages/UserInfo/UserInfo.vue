@@ -1,19 +1,20 @@
 <template>
+
   <div>
     <section class="profile">
-      <HeaderTop title="我的"></HeaderTop>
+      <HeaderTop title="用户中心"></HeaderTop>
       <section class="profile-number">
-        <router-link :to="userInfo.id ? '/userinfo': '/login'" class="profile-link">
+        <router-link class="profile-link">
           <div class="profile_image">
             <i class="iconfont icon-person"></i>
           </div>
           <div class="user-info">
-            <p class="user-info-top">{{userInfo.name || '登录/注册'}}</p>
+            <p class="user-info-top">{{userInfo.name}}</p>
             <p>
                 <span class="user-icon">
                   <i class="iconfont icon-shouji icon-mobile"></i>
                 </span>
-              <span class="icon-mobile-number">{{userInfo.phone || '暂无绑定手机号'}}</span>
+              <span @click="altertPhone" class="icon-mobile-number">{{userInfo.phone || '暂无绑定手机号'}}</span>
             </p>
           </div>
           <span class="arrow">
@@ -23,17 +24,13 @@
       </section>
       <section class="profile_info_data border-1px">
         <ul class="info_data_list">
-          <a href="javascript:" @click="$router.push('/foodiegroup')" class="info_data_link">
-            <span class="info_data_top"><span>{{articleCount}}</span>篇</span>
-            <span class="info_data_bottom">我的点评</span>
+          <a href="javascript:" class="info_data_link">
+            <span class="info_data_top"><span>0</span>篇</span>
+            <span class="info_data_bottom">收货地址</span>
           </a>
           <a href="javascript:" class="info_data_link">
             <span class="info_data_top"><span>0</span>个</span>
-            <span class="info_data_bottom">我的优惠</span>
-          </a>
-          <a href="javascript:" class="info_data_link">
-            <span class="info_data_top"><span>0</span>分</span>
-            <span class="info_data_bottom">我的积分</span>
+            <span class="info_data_bottom">修改密码</span>
           </a>
         </ul>
       </section>
@@ -101,20 +98,8 @@
 
 <script>
 import {mapState} from 'vuex'
-import { MessageBox, Toast } from 'mint-ui'
-import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
 export default {
-  created () {
-    console.log(this.userInfo)
-    this.$http.get('http://localhost:8087/buyer/article/canteen/mylist?userId=' + this.userInfo.id + '&userName=' + encodeURI(this.userInfo.name)).then((response) => {
-      response = response.body
-      if (response.code === 0) {
-        this.articleCount = response.data.length + 1
-      } else {
-        this.articleCount = 0
-      }
-    })
-  },
+  name: 'UserInfo',
   computed: {
     ...mapState(['userInfo'])
   },
@@ -123,24 +108,11 @@ export default {
       articleCount: Number
     }
   },
-  methods: {
-    logout () {
-      MessageBox.confirm('确认退出吗?').then(
-        action => {
-          // 请求退出
-          this.$store.dispatch('logout')
-          Toast('登出完成')
-        },
-        action => {
-          console.log('点击了取消')
-        }
-      )
-    }
-  },
-  components: {HeaderTop}
+  created () {
+
+  }
 }
 </script>
-
 <style lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixins.styl"
   .profile //我的

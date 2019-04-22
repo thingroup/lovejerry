@@ -38,12 +38,13 @@
             </div>
             <span>吃货交友</span>
           </a>
-          <a href="javascript:" class="link_to_food" @click="$router.push('/createArticle')">
+          <a href="javascript:" class="link_to_food" v-if="userInfo.id!=null" @click="$router.push('/createArticle')">
             <div class="food_container">
               <img src="./images/1.png">
             </div>
             <span>我要发帖</span>
           </a>
+          <AlertTip :alertText="alertText" v-show="alertShow" @closeTip="closeTip"/>
         </div>
       </div>
       <!-- Add Pagination -->
@@ -53,19 +54,36 @@
     <div class="title">
       <span style="margin-left: 30%;font-size: 30px">我的文章</span>
     </div>
+    <div v-if="userInfo.id==null">
+      <br>
+      <br>
+      <br>
+      <span style="margin-left: 30%;font-size: 25px">您尚未登录</span>
+    </div>
   <NewList></NewList>
   </div>
   <!--<router-view/>-->
 </template>
 
 <script>
+import AlertTip from '../../components/AlertTip/AlertTip.vue'
+import {mapState} from 'vuex'
 import Swiper from 'swiper'
 import 'swiper/dist/css/swiper.min.css'
 import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
 import NewList from '../../components/NewsList/NewsList'
 export default {
-  components: {NewList, HeaderTop},
+  components: {NewList, HeaderTop, AlertTip},
   name: 'FoodieGroup',
+  computed: {
+    ...mapState(['userInfo'])
+  },
+  data () {
+    return {
+      alertText: '', // 提示文本
+      alertShow: false // 是否显示警告框
+    }
+  },
   mounted () {
     //  创建一个swiper来实现轮播
     new Swiper('.swiper-container', {
@@ -74,6 +92,17 @@ export default {
         el: '.swiper-pagination'
       }
     })
+  },
+  methods: {
+    showAlert: function (alertText) {
+      this.alertShow = true
+      this.alertText = alertText
+    },
+    // 关闭警告框
+    closeTip () {
+      this.alertShow = false
+      this.alertText = ''
+    }
   }
 }
 </script>

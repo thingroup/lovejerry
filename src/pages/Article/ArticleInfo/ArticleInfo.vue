@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import Star from '../../../components/Star/Star.vue'
 import ArticleRatings from '../../../components/ArticleRatings/ArticleRatings'
 const ERR_OK = 0
@@ -28,6 +29,9 @@ export default {
       detail: '',
       comments: []
     }
+  },
+  computed: {
+    ...mapState(['userInfo'])
   },
   created () {
     this.getlist()

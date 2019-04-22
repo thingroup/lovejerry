@@ -10,12 +10,27 @@
       <div v-else-if="status=='-1'">
         {{likes}}<img @click="addlike" :style="{width:size+'px'}" src="./images/like.png"> {{dislikes}}<img @click="addhate" :style="{width:size+'px'}" src="./images/unliked.png">
       </div>
+      <AlertTip :alertText="alertText" v-show="alertShow" @closeTip="closeTip"/>
     </div>
 </template>
 
 <script type="text/javascript">
+  import AlertTip from '../../components/AlertTip/AlertTip.vue'
+  import {mapState} from 'vuex'
 var type = 0
 export default {
+  comments:{
+    AlertTip
+  },
+  components: {
+    AlertTip
+  },
+  data () {
+    return {
+      alertText: '', // 提示文本
+      alertShow: false // 是否显示警告框
+    }
+  },
   props: {
     status: '',
     likes: '',
@@ -26,16 +41,33 @@ export default {
     req: '',
     size: ''
   },
+  computed: {
+    ...mapState(['userInfo'])
+  },
   name: 'Likes',
   methods: {
+    showAlert: function (alertText) {
+      this.alertShow = true
+      this.alertText = alertText
+    },
+    // 关闭警告框
+    closeTip () {
+      this.alertShow = false
+      this.alertText = ''
+    },
     addlike: function () {
+      if(this.userInfo.id==null){
+        this.showAlert('您尚未登录')
+        return
+      }
       this.type = 1
       var url
       if(this.req){
         url='http://localhost:8087/buyer/article/canteen/addlikes?articleId=' +
           this.articleId + '&status=' +
           this.status + '&type=' +
-          this.type + '&canteenId='+this.canteenId
+          this.type + '&canteenId='+this.canteenId +
+          '&userId='+ this.userInfo.id
         if(this.commentId!=null){
           url+= '&articleCommentId=' + this.commentId
         }
@@ -43,7 +75,8 @@ export default {
         url='http://localhost:8087/buyer/article/addlikes?articleId=' +
           this.articleId + '&status=' +
           this.status + '&type=' +
-          this.type + '&canteenId='+this.canteenId
+          this.type + '&canteenId='+this.canteenId +
+          '&userId='+ this.userInfo.id
         if(this.commentId!=null){
           url+= '&articleCommentId=' + this.commentId
         }
@@ -62,12 +95,17 @@ export default {
       })
     },
     addhate: function () {
+      if(this.userInfo.id==null){
+        this.showAlert('您尚未登录')
+        return
+      }
       this.type = -1
       if(this.req){
         var url='http://localhost:8087/buyer/article/canteen/addlikes?articleId=' +
           this.articleId + '&status=' +
           this.status + '&type=' +
-          this.type + '&canteenId='+this.canteenId
+          this.type + '&canteenId='+this.canteenId +
+          '&userId='+ this.userInfo.id
         if(this.commentId!=null){
           url+= '&articleCommentId=' + this.commentId
         }
@@ -75,7 +113,8 @@ export default {
         var url='http://localhost:8087/buyer/article/addlikes?articleId=' +
           this.articleId + '&status=' +
           this.status + '&type=' +
-          this.type + '&canteenId='+this.canteenId
+          this.type + '&canteenId='+this.canteenId +
+          '&userId='+ this.userInfo.id
         if(this.commentId!=null){
           url+= '&articleCommentId=' + this.commentId
         }

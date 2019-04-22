@@ -47,6 +47,7 @@
 
 <script>
 import AddScore from '../../../components/Score/AddScore.vue'
+import {mapState} from 'vuex'
 var saved = ''
 var isClear = false
 export default {
@@ -82,8 +83,8 @@ export default {
     }
   },
   created () {
-    this.uname = 'testUserName_1'
-    this.uid = 'testUser_1'
+    this.uname = this.userInfo.name
+    this.uid = this.userInfo.id
     this.$http.get('http://localhost:8087/canteens/canteenslist').then((response) => {
       response = response.body
       if (response.code === 0) {
@@ -92,6 +93,7 @@ export default {
     })
   },
   computed: {
+    ...mapState(['userInfo']),
     finalScore () {
       this.score = (this.score1 + this.score2) / 2
     }
@@ -128,7 +130,9 @@ export default {
           '&articleName=' + this.title +
           '&articleText=' + this.text +
           '&score=' + this.score +
-          '&canteenId=' + this.canteenId
+          '&canteenId=' + this.canteenId +
+          '&userId=' + this.userInfo.id +
+          '&userName=' + encodeURI(this.userInfo.name)
         this.$http.post(url).then((response) => {
           response = response.body
           if (response.code === 0) {

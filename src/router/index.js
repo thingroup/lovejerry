@@ -10,15 +10,21 @@ import Shop from '../pages/Shop/Shop.vue'
 import ShopGoods from '../pages/Shop/ShopGoods/ShopGoods.vue'
 import ShopRatings from '../pages/Shop/ShopRatings/ShopRatings.vue'
 import ShopInfo from '../pages/Shop/ShopInfo/ShopInfo.vue'
-import Article from  '../pages/Article/Article.vue'
+import Article from '../pages/Article/Article.vue'
 import ArticleInfo from '../pages/Article/ArticleInfo/ArticleInfo'
 import Payment from '../pages/payment/Payment'
 import orderDetail from '../pages/Order/detail'
 import CreateArticle from '../pages/Article/Create/CreateArticle.vue'
+import UserInfo from '../pages/UserInfo/UserInfo'
 Vue.use(VueRouter)
 
 export default new VueRouter({
   routes: [
+    {
+      path: '/userInfo',
+      name: 'UserInfo',
+      component: UserInfo
+    },
     {
       path: '/createArticle',
       name: 'CreateArticle',
@@ -63,7 +69,7 @@ export default new VueRouter({
     {
       path: '/payment',
       name: 'Payment',
-      component: Payment,
+      component: Payment
     },
     {
       path: '/foodieGroup',
@@ -76,12 +82,12 @@ export default new VueRouter({
     {
       path: '/article',
       name: 'Article',
-      component: Article,
+      component: Article
     },
     {
       path: '/articleinfo',
       name: 'ArticleInfo',
-      component : ArticleInfo,
+      component: ArticleInfo,
       children: [
         {
           path: '',
@@ -120,8 +126,8 @@ export default new VueRouter({
         {
           path: '',
           redirect: '/shop/goods'
-        },
+        }
       ]
-    },
+    }
   ]
 })

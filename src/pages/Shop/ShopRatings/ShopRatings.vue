@@ -125,7 +125,12 @@ export default {
   },
   created () {
     this.canteenId = this.$route.query.canteenId
-    this.$http.get('http://localhost:8087/buyer/article/list?canteenId=' + this.$route.query.canteenId).then((response) => {
+    var url = 'http://localhost:8087/buyer/article/list?canteenId=' + this.$route.query.canteenId +
+      '&userId= '
+    if (this.userInfo.id != null) {
+      url = url + this.userInfo.id
+    }
+    this.$http.get(url).then((response) => {
       response = response.body
       if (response.code === ERR_OK) {
         this.articleList = response.data
@@ -144,7 +149,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['info', 'ratings']),
+    ...mapState(['info', 'ratings', 'userInfo']),
     ...mapGetters(['positiveSize']),
 
     filterRatings () {
